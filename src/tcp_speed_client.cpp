@@ -10,9 +10,11 @@
 #define COMPLETED "Completed"
 
 // send 1GB of data to the server
-#define DATA_BYTES (1024*1024*1024)
+//#define DATA_BYTES (1024 * 1024*1024*1024)
+//uint64_t DATA_BYTES = (1024 * 1024*1024*1024);
+uint64_t DATA_BYTES = 1099511627776L;
 // write by this block size
-#define BLOCK_BYTES (1024*1)
+#define BLOCK_BYTES (1024*32)
 
 const char data[BLOCK_BYTES] = "NVIDIA DRIVE AGX self-driving compute platforms are built on NVIDIA Xavier™, the world’s first processor designed for autonomous driving. The auto-grade Xavier system-on-a-chip (SoC) is in production today and architected for safety, incorporating six different types of processors to run redundant and diverse algorithms for AI, sensor processing, mapping and driving. Leveraging Xavier, DRIVE AGX platforms process data from camera, lidar, radar, and ultrasonic sensors to understand the complete 360-degree environment in real-time, localize itself to a map, and plan a safe path forward.";
 
@@ -46,7 +48,7 @@ main(int argc, char *argv[])
     if (num_blks == 0) {
         num_blks = 1;
     }
-    for (int i = 0; i < num_blks; ++i) {
+    for (size_t i = 0; i < num_blks; ++i) {
         if (write(sock, data, BLOCK_BYTES) < 0) {
             perror("writing on stream socket");
             break;

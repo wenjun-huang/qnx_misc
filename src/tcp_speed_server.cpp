@@ -8,7 +8,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-const uint64_t k_report_step = 50 * 1024 * 1024; // report speed every 50MB;
+#define BLOCK_BYTES (1024*32)
+const uint64_t k_report_step = 1024 * 1024 * 1024; // report speed every 50MB;
 const uint64_t k_billion = 1000000000L;
 
 int report_stats(uint64_t bytes, struct timespec& start) {
@@ -55,7 +56,7 @@ int main()
 
     /* Start accepting connections */
     listen(sock, 5);
-    char buf[1024];
+    char buf[BLOCK_BYTES];
     do {
         int msgsock = accept(sock, 0, 0);
         if (msgsock == -1) {
@@ -72,7 +73,7 @@ int main()
             }
             start_step = start;
             while (true) {
-                int rval = read(msgsock, buf,  1024);
+                int rval = read(msgsock, buf,  BLOCK_BYTES);
                 if (rval > 0) {
                     bytes += rval;
                     if (bytes >= next_report_bytes) {
